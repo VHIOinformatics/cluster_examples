@@ -1,6 +1,6 @@
 #!/bin/bash
-#SBATCH --job-name=20230315_HPalmer_PDX_RUTINA  # Job name
-#SBATCH -p seoane
+#SBATCH --job-name=20211126_HPalmer_WES  # Job name
+#SBATCH -p long
 #SBATCH --mail-type=END,FAIL          # Mail events (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=paumunoz@vhio.net     # Where to send mail	
 #SBATCH --ntasks=1                    # Run on a single CPU
@@ -9,22 +9,22 @@
 #SBATCH --output=%x_%j.log   # Standard output and error lo
 #SBATCH --error=%x_%j.err
 
+
 samples="Samplefile.csv"
-version="3.1.1"
+version="3.1.2"
 pipeline="nf-core/sarek"
 profile="singularity"
 genome="GATK.GRCh38"
-tools="mutect2,strelka,vep,snpeff"
+tools="mutect2,strelka,haplotypecaller,snpeff"
 sarekoutput="results_"$SLURM_JOB_NAME
 logdir="/mnt/bioinfnas/bioinformatics/logProjects/"
 logfile=$SLURM_JOB_NAME".txt"
-other="--pon ./somatic-hg38_1000g_pon.hg38.vcf.gz  --pon_index ./somatic-hg38_1000g_pon.hg38.vcf.gz.tbi"
+other="--pon ./somatic-hg38_1000g_pon.hg38.vcf.gz  --pon_tbi ./somatic-hg38_1000g_pon.hg38.vcf.gz.tbi"
 igenomes='/mnt/bioinfnas/general/refs/igenomes'
 #igenomes="--igenomes_base  /mnt/bioinfnas/general/refs/igenome"
 maxmem="74.GB"
 max_cpu="30"
 max_time="12.h"
-job_partition="seoane"
 cmd="nextflow run $pipeline -profile $profile --input $samples -c nextflow.conf  --genome $genome -r $version --tools $tools --igenomes_base $igenomes --outdir $sarekoutput $other"
 
 if [ ! -d "cache" ]
@@ -43,14 +43,11 @@ singularity {
   autoMounts = true
   cacheDir='./cache/'
 }
-executor {
-  name = 'slurm'
-  queueSize = 12
-}
 
 process { 
   executor = 'slurm'
-  clusterOptions = '--export=all --nodes=1 --ntasks=1 -p $job_partition'
+  queue = { task.memory <= 9.GB || task.time <= 5.h ? 'short' : 'highmem' }
+  queueSize = 12
 }
 params {
   max_memory = '$maxmem'
