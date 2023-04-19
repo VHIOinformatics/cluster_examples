@@ -44,11 +44,16 @@ singularity {
   cacheDir='./cache/'
 }
 
-process { 
-  executor = 'slurm'
-  queue = { task.memory <= 9.GB || task.time <= 5.h ? 'short' : 'highmem' }
+executor {
+  name = 'slurm'
   queueSize = 12
 }
+
+process { 
+  executor = 'slurm'
+  queue = { task.memory <= 10.GB || task.time <= 2.h ? 'short' : 'highmem' }
+}
+
 params {
   max_memory = '$maxmem'
   max_cpus = $max_cpu
