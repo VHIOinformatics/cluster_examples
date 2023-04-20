@@ -11,17 +11,17 @@
 
 
 samples="Samplefile.csv"
-version="3.1.2"
-pipeline="nf-core/sarek"
+version="xxx"
+pipeline="nf-core/xxx"
 profile="singularity"
 genome="GATK.GRCh38"
-tools="mutect2,strelka,haplotypecaller,snpeff"
+tools="xxxxx"
 sarekoutput="results_"$SLURM_JOB_NAME
-logdir="/mnt/bioinfnas/bioinformatics/logProjects/"
+logdir="XXXXX"
 logfile=$SLURM_JOB_NAME".txt"
-other="--pon ./somatic-hg38_1000g_pon.hg38.vcf.gz  --pon_tbi ./somatic-hg38_1000g_pon.hg38.vcf.gz.tbi"
+other=""
 igenomes='/mnt/bioinfnas/general/refs/igenomes'
-#igenomes="--igenomes_base  /mnt/bioinfnas/general/refs/igenome"
+
 maxmem="74.GB"
 max_cpu="30"
 max_time="12.h"
@@ -51,7 +51,8 @@ executor {
 
 process { 
   executor = 'slurm'
-  queue = { task.memory <= 10.GB || task.time <= 2.h ? 'short' : 'highmem' }
+  queue    = { task.time <= 5.h && task.memory <= 10.GB ? 'short': (task.memory <= 95.GB ? 'long' : 'highmem')}
+
 }
 
 params {
