@@ -8,7 +8,7 @@
 #SBATCH --cpus-per-task=1
 #SBATCH --output=%x_%j.log   # Standard output and error lo
 #SBATCH --error=%x_%j.err
-
+#SBATCH -w bioinf3.vhio.org #OPTIONAL, IN CASE YOU ONLY NEED SPECIFIC NODES
 
 samples="Samplefile.csv"
 version="xxx"
@@ -52,6 +52,8 @@ executor {
 process { 
   executor = 'slurm'
   queue    = { task.time <= 5.h && task.memory <= 10.GB ? 'short': (task.memory <= 95.GB ? 'long' : 'highmem')}
+#  clusterOptions = { " -w bioinf.vhio.org --exclude=bioinf2.vhio.org"}    ####OPTIONAL, ONLY USE IN CASE YOU NEED TO LAUNCH THE JOB IN SPECIFIC NODES
+
 
 }
 
