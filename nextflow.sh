@@ -51,7 +51,7 @@ executor {
 
 process { 
   executor = 'slurm'
-  queue    = { task.time <= 5.h && task.memory <= 10.GB ? 'short': (task.memory <= 95.GB ? 'long' : 'highmem')}
+  queue    = { task.time <= 5.h && task.memory <= 10.GB ? 'short': (task.time >= 10.d || task.memory < 72.GB ? 'long' : 'highmem')}
 #  clusterOptions = { " -w bioinf.vhio.org --exclude=bioinf2.vhio.org"}    ####OPTIONAL, ONLY USE IN CASE YOU NEED TO LAUNCH THE JOB IN SPECIFIC NODES
 
 
