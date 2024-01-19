@@ -1,10 +1,10 @@
 #!/bin/bash
-#SBATCH --job-name=20211126_HPalmer_WES  # Job name
+#SBATCH --job-name=example  # Job name
 #SBATCH -p long
 #SBATCH --mail-type=END,FAIL          # Mail events (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=paumunoz@vhio.net     # Where to send mail	
 #SBATCH --ntasks=1                    # Run on a single CPU
-#SBATCH --mem=1G                     # Job memory request
+#SBATCH --mem=8G                     # Job memory request
 #SBATCH --cpus-per-task=1
 #SBATCH --output=%x_%j.log   # Standard output and error lo
 #SBATCH --error=%x_%j.err
