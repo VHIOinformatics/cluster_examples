@@ -5,3 +5,5 @@ EXAMPLES OF SCRIPTS TO USE IN THE CLUSTER
 - parallelize.R: example of a script to parallelize tasks in R
 - squeue.sh: bash script to show slurm jobs with allocated resources
 - MeanDepthSamtools.sh: bash script to calculate the mean depth per chromosome per sample of a run of sarek
+- copy_files.sh: slurm script to copy files within the cluster without keeping permissions and timestamps
+
